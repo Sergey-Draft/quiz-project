@@ -1,5 +1,7 @@
 import _ from 'lodash';
 import './style.scss';
+import Icon from './assets/smartkeeda_quiz.jpg' 
+
 
  function component() {
    const element = document.createElement('div');
@@ -12,3 +14,13 @@ import './style.scss';
  }
  
  document.body.appendChild(component());
+
+
+
+
+ const myIcon = new Image();
+ myIcon.src = Icon;
+
+ document.body.appendChild(myIcon);
+
+ 

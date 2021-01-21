@@ -21,6 +21,7 @@
   "homepage": "https://github.com/Sergey-Draft/quiz-project#readme",
   "devDependencies": {
     "clean-webpack-plugin": "^3.0.0",
+    "copy-webpack-plugin": "^7.0.0",
     "css-loader": "^5.0.1",
     "html-webpack-plugin": "^4.5.1",
     "postcss-loader": "^4.1.0",
