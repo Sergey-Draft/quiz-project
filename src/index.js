@@ -3,7 +3,7 @@ import './style.scss';
 import Icon from './assets/smartkeeda_quiz.jpg' 
 
 
- function component() {
+/*  function component() {
    const element = document.createElement('div');
  
   // Lodash, currently included via a script, is required for this line to work
@@ -22,5 +22,5 @@ import Icon from './assets/smartkeeda_quiz.jpg'
  myIcon.src = Icon;
 
  document.body.appendChild(myIcon);
-
+ */
  
