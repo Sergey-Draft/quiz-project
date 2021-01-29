@@ -18,7 +18,7 @@
 
 
   <!-- First page -->
-  <div class="start_page quiz">
+  <div class="start_page">
 
     <nav class="navbar navbar-expand-lg fixed-top ">
       <a class="navbar-brand" href="#">IT-Academy logo</a>
@@ -41,131 +41,113 @@
       </div>
     </nav>
 
-    <header class="header">
-      <div class="container">
-
-        <div class="description text-center">
-          <h2>project Quizz for FUN</h2>
-          <p>description</p>
-          <button class="btn btn-outline-warning btn-lg">start quiz!</button>
-
-        </div>
-
+    <div class="container">
+      <div class="description text-center">
+        <h2>project Quizz for FUN</h2>
+        <p>description</p>
+        <button class="btn btn-primary amber btn-lg btn-start">start quiz!</button>
       </div>
-
-    </header>
+    </div>
 
   </div>
 
 
   <!-- second page -->
 
-  <header class="header_second">
-    <h2 class="text-center">Select category</h2>
-    <div class="container">
-      <div class="row align-items-center">
-        <div class="col-lg-4 col-md-4 col-sm-12 col">
-
-          <img align="center" src="./assets/smartkeeda_quiz.jpg" class="img-fluid">
+  <div class="main_page hide">
+    <div class="container main">
+      <div class="box-category hide">
+        <h2 class="text-center">Select category</h2>
+        <div class="row align-items-center">
+          <div class="col-lg-4 col-md-4 col-sm-12 col">
+            <img align="center" src="./assets/smartkeeda_quiz.jpg" class="img-fluid">
             <div class="category">CATEGORY</div>
-
-        </div>
-
-
-        <div class="col-lg-4 col-md-4 col-sm-12 col">
-
-          <img align="center" src="./assets/smartkeeda_quiz.jpg" class="img-fluid">
+          </div>
+          <div class="col-lg-4 col-md-4 col-sm-12 col">
+            <img align="center" src="./assets/smartkeeda_quiz.jpg" class="img-fluid">
             <div class="category">CATEGORY</div>
-
-        </div>
-        <div class="col-lg-4 col-md-4 col-sm-12">
-          <p>CATEGORY</p>
-        </div>
-        <div class="col-lg-4 col-md-4 col-sm-12">
-          <p>CATEGORY</p>
-        </div>
-        <div class="col-lg-4 col-md-4 col-sm-12">
-          <p>CATEGORY</p>
-        </div>
-        <div class="col-lg-4 col-md-4 col-sm-12">
-          <p>CATEGORY</p>
-        </div>
-        <div class="col-lg-4 col-md-4 col-sm-12">
-          <p>CATEGORY</p>
-        </div>
-        <div class="col-lg-4 col-md-4 col-sm-12">
-          <p>CATEGORY</p>
-        </div>
-        <div class="col-lg-4 col-md-4 col-sm-12">
-          <p>CATEGORY</p>
+          </div>
+          <div class="col-lg-4 col-md-4 col-sm-12">
+            <p>CATEGORY</p>
+          </div>
+          <div class="col-lg-4 col-md-4 col-sm-12">
+            <p>CATEGORY</p>
+          </div>
+          <div class="col-lg-4 col-md-4 col-sm-12">
+            <p>CATEGORY</p>
+          </div>
+          <div class="col-lg-4 col-md-4 col-sm-12">
+            <p>CATEGORY</p>
+          </div>
+          <div class="col-lg-4 col-md-4 col-sm-12">
+            <p>CATEGORY</p>
+          </div>
+          <div class="col-lg-4 col-md-4 col-sm-12">
+            <p>CATEGORY</p>
+          </div>
+          <div class="col-lg-4 col-md-4 col-sm-12">
+            <p>CATEGORY</p>
+          </div>
         </div>
       </div>
-    </div>
-    </div>
-  </header>
 
 
-  <!-- questions -->
-  <div class="quiz-box custom-box">
-    <div class="question-number">  
-      question 1 of 5
-    </div>
-    <div class="question-text">
-      How many fingers do you have?
-    </div>
-    <div class="option-container">
-      <div class="option">22</div>
-      <div class="option">21</div>
-      <div class="option">20</div>
-      <div class="option">3</div>
-    </div>
-    <div class="next-question-btn">
-      <button type="button" class="btn btn-outline-warning">Next</button>
-    </div>
-    <div class="answers-indicator">
-      <div></div>
-      <div></div>
-      <div></div>
-      <div></div>
-      <div></div>
-    </div>
-
+<!-- questions -->
+<div class="quiz-box custom-box">
+  <div class="question-number">
+    вопрос 1 из 10
+  </div>
+  <div class="question-text">
+  </div>
+  <div class="option-container">
+  </div>
+  <div class="next-question-btn">
+    <button type="button" class="btn btn-outline-warning next">Next</button>
+  </div>
+  <div class="answers-indicator">
   </div>
 
-  <!-- results -->
-  <div class="result-box custom-box">
-    <h1>Your result</h1>
-    <table>
-      <tr>
-        <td>Total Question</td>
-        <td><span class="total-question">5</span></td>
-      </tr>
-      <tr>
-        <td>Attempt</td>
-        <td><span class="total-attempt">4</span></td>
-      </tr>
-      <tr>
-        <td>Correct</td>
-        <td><span class="total-correct">3</span></td>
-      </tr>
-      <tr>
-        <td>Wrong</td>
-        <td><span class="total-wrong">1</span></td>
-      </tr>
-      <tr>
-        <td>Percentage</td>
-        <td><span class="percentage">60.00%</span></td>
-      </tr>
-      <tr>
-        <td>Total Score</td>
-        <td><span class="total-score">33</span></td>
-      </tr>
-    </table>
-    <button type="button" class="btn btn-outline-warning">Try Again</button>
-    <button type="button" class="btn btn-outline-warning">Home</button>
+</div>
+
+<!-- results -->
+<div class="result-box custom-box hide">
+  <h1>Your result</h1>
+  <table>
+    <tr>
+      <td>Total Question</td>
+      <td><span class="total-question"></span></td>
+    </tr>
+    <tr>
+      <td>Attempt</td>
+      <td><span class="total-attempt"></span></td>
+    </tr>
+    <tr>
+      <td>Correct</td>
+      <td><span class="total-correct"></span></td>
+    </tr>
+    <tr>
+      <td>Wrong</td>
+      <td><span class="total-wrong"></span></td>
+    </tr>
+    <tr>
+      <td>Percentage</td>
+      <td><span class="percentage"></span></td>
+    </tr>
+    <tr>
+      <td>Total Score</td>
+      <td><span class="total-score"></span></td>
+    </tr>
+  </table>
+  <button type="button" class="btn btn-outline-warning try-btn">Try Again</button>
+  <button type="button" class="btn btn-outline-warning home-btn">Home</button>
+</div>
+
+  </div>
   </div>
 
 
+
+    </div>
 
 
 
