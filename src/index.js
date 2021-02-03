@@ -1,6 +1,7 @@
 import _, { includes } from 'lodash';
 import './style.scss';
 import Icon from './assets/smartkeeda_quiz.jpg'
+import createCategories from './categories'
 
 const getData = async (url) => {
   const quiz = await fetch(url);
@@ -189,24 +190,6 @@ window.onload = function () {
   };
 
 
-
-  /* создаем категории */
-  const createCategories = () => {
-    for (let i = 0; i < allCat.length; i++) {
-      let categoryName = document.createElement('div');
-      let categoryImg = document.createElement('img');
-      categoryName.innerText = allCat[i].name;
-      categoryImg.id = allCat[i].id;
-      categoryName.id = allCat[i].id;
-      categoryName.classList.add('category');
-      categoryImg.classList.add('img-fluid');
-      categoryImg.src = './assets/pusto4.png';
-      categoryCol[i].appendChild(categoryImg);
-      /* categoryName.innerText = allCat.name; */
-      categoryCol[i].appendChild(categoryName);
-    }
-  }
-
   /* выбираем категорию */
   categoryBox.addEventListener('click', (event) => {
     if (event.target.className == 'img-fluid' || event.target.className == 'category') {
@@ -256,12 +239,7 @@ window.onload = function () {
       .then(data => {
         allCat = data.trivia_categories.slice(0, 21);
         console.log(allCat)
-        for (let i = 0; i < allCat.length; i++) {
-          while (categoryCol[i].firstChild) {//почистим категории
-            categoryCol[i].removeChild(categoryCol[i].firstChild);
-          }
-        }
-        createCategories();
+        createCategories(allCat);
       });
   })
 
