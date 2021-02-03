@@ -16,6 +16,12 @@ const getQuestions = async (category) => {
   return data;
 }
 
+
+const dataGet2 = async (url) => {
+  let response = await fetch(url);
+  return await response.json();
+}
+
 const startPage = document.querySelector('.start_page');
 const mainPage = document.querySelector('.main_page');
 const quizBox = document.querySelector('.quiz-box');
@@ -29,6 +35,9 @@ const indicatorsContainer = document.querySelector('.answers-indicator');
 const tryBtn = document.querySelector('.try-btn');
 const homeBtn = document.querySelector('.home-btn');
 const startBtn = document.querySelector('.btn-start');
+const categoryBox = document.querySelector('.box-category');
+const categoryCol = document.querySelectorAll('.col');
+
 
 
 
@@ -43,6 +52,9 @@ let correctAnswers = 0;
 let incorrectAnswers = 0;
 let attempt = 1;
 
+var allCat;
+let idCategory;
+
 
 
 
@@ -54,12 +66,10 @@ const getNewQuestion = (i) => {
 
   //создадим массив с вариантами ответов из апи и массив правильных ответов
   answers = questions.results[i].incorrect_answers;
-  console.log('incorrect'+'='+questions.results[i].incorrect_answers);
   answers.push(questions.results[i].correct_answer);
-  console.log('answers'+'='+ answers);
   let answLength = answers.length;
   correctArr.push(questions.results[i].correct_answer);
-  console.log(correctArr);
+  console.log('правильные ответы:' + ' = ' + correctArr);
 
   //вставим в документ
   let animation = 0.15;
@@ -81,24 +91,10 @@ const getNewQuestion = (i) => {
 
 
 window.onload = function () {
-  getQuestions(21).then(data => {
-    questions = data;
-    questionCounter = 0;
-    getNewQuestion(questionCounter);
-  });
 
- 
-  startBtn.addEventListener('click' , () => {
-    startPage.classList.add('hide');
-    mainPage.classList.remove('hide');
-    quizBox.classList.remove('hide');
-  })
-
-  //вставим вопросы из апи в разметку
   next.addEventListener('click', () => {
     questionCounter++;
     if (questionCounter >= questions.results.length) {
-      console.log('the end!');
       quizEnd();
     } else {
       while (optionContainer.firstChild) {//удалим предыдущие контейнеры с вариантами
@@ -106,8 +102,6 @@ window.onload = function () {
       }
       getNewQuestion(questionCounter);
     }
-    console.log('correct=' + correctAnswers);
-    console.log('incorrect=' + incorrectAnswers);
   });
 
 
@@ -116,26 +110,20 @@ window.onload = function () {
     let target = event.target;
     if (target.className !== 'option') return;
     else {
-      /* console.log(target.innerText); */
       if (correctArr.includes(target.innerText)) {
-        /* console.log('correct'); */
         target.classList.add('correct');
         indicatorValue('correct');
         correctAnswers++;
-
       } else {
-        /* console.log('Incorrect'); */
         indicatorValue('incorrect');
         target.classList.add('incorrect');
         incorrectAnswers++;
         const optionLen = optionContainer.children.length;
-/*         console.log(optionLen); */
         for (let i = 0; i < optionLen; i++) {
           if (correctArr.includes(optionContainer.children[i].innerHTML)) {
             optionContainer.children[i].classList.add('correct');
           }
         }
-
       }
     }
     lock();
@@ -149,19 +137,18 @@ window.onload = function () {
     }
   };
 
-  //индикатор
+  //индикаторы ответов
   const answerIndicator = () => {
     for (let i = 0; i < 10; i++) {
       let indicator = document.createElement('div');
       indicatorsContainer.appendChild(indicator);
     }
   };
-  //
+  //примет значение правильного или неправильного ответа
   const indicatorValue = (value) => {
     console.log(value);
     indicatorsContainer.children[questionCounter].classList.add(value);
   }
-
   answerIndicator();
 
   const quizEnd = () => {
@@ -169,26 +156,20 @@ window.onload = function () {
     resultsBox.classList.remove('hide');
     quizResult();
   }
-
+  //заполним таблицу с результатами
   const quizResult = () => {
+    document.querySelector('.category-name').innerHTML = allCat[idCategory - 9].name;
     document.querySelector('.total-question').innerHTML = questionCounter;
     document.querySelector('.total-attempt').innerHTML = attempt;
     document.querySelector('.total-correct').innerHTML = correctAnswers;
     document.querySelector('.total-wrong').innerHTML = incorrectAnswers;
-    document.querySelector('.percentage').innerHTML = ((correctAnswers/questionCounter) * 100).toFixed(2) + '%';
+    document.querySelector('.percentage').innerHTML = ((correctAnswers / questionCounter) * 100).toFixed(2) + '%';
     document.querySelector('.total-score').innerHTML = correctAnswers + '/' + questionCounter;
+    localStorage.setItem('Name', correctAnswers);
   }
 
-
-  tryBtn.addEventListener('click', () => {
-    resultsBox.classList.add('hide');
-    quizBox.classList.remove('hide');
-/*     window.location.reload(); */
-    attempt++;
-    clearQuiz();
-  })
-
-  const clearQuiz = () =>{
+  //очистим все переменные и заново отправим запрос
+  const clearQuiz = () => {
     correctAnswers = 0;
     incorrectAnswers = 0;
     correctArr.length = 0;
@@ -196,10 +177,10 @@ window.onload = function () {
     while (optionContainer.firstChild) {//удалим предыдущие контейнеры с вариантами
       optionContainer.removeChild(optionContainer.firstChild);
     }
-    while (indicatorsContainer.firstChild) {//удалим предыдущие контейнеры с вариантами
+    while (indicatorsContainer.firstChild) {//удалим индикаторы
       indicatorsContainer.removeChild(indicatorsContainer.firstChild);
     }
-    getQuestions(21).then(data => {
+    getQuestions(idCategory).then(data => {
       questions = data;
       questionCounter = 0;
       getNewQuestion(questionCounter);
@@ -207,10 +188,152 @@ window.onload = function () {
     });
   };
 
+
+
+  /* создаем категории */
+  const createCategories = () => {
+    for (let i = 0; i < allCat.length; i++) {
+      let categoryName = document.createElement('div');
+      let categoryImg = document.createElement('img');
+      categoryName.innerText = allCat[i].name;
+      categoryImg.id = allCat[i].id;
+      categoryName.id = allCat[i].id;
+      categoryName.classList.add('category');
+      categoryImg.classList.add('img-fluid');
+      categoryImg.src = './assets/pusto4.png';
+      categoryCol[i].appendChild(categoryImg);
+      /* categoryName.innerText = allCat.name; */
+      categoryCol[i].appendChild(categoryName);
+    }
+  }
+
+  /* выбираем категорию */
+  categoryBox.addEventListener('click', (event) => {
+    if (event.target.className == 'img-fluid' || event.target.className == 'category') {
+      idCategory = event.target.id
+      console.log(idCategory);
+      getQuestions(idCategory).then(data => {
+        questions = data;
+        questionCounter = 0;
+        getNewQuestion(questionCounter);
+      });
+      quizBox.classList.remove('hide');
+      categoryBox.classList.add('hide');
+
+    }
+  })
+
+
+  ///////////////////////////////////////////////////кнопки
+
+  /* home */
   homeBtn.addEventListener('click', () => {
     resultsBox.classList.add('hide');
     mainPage.classList.add('hide');
     startPage.classList.remove('hide');
+    /* почистим контейнеры и переменные */
+    correctAnswers = 0;
+    incorrectAnswers = 0;
+    correctArr.length = 0;
+    answers.length = 0;
+    while (optionContainer.firstChild) {//удалим предыдущие контейнеры с вариантами
+      optionContainer.removeChild(optionContainer.firstChild);
+    }
+    while (indicatorsContainer.firstChild) {//удалим индикаторы
+      indicatorsContainer.removeChild(indicatorsContainer.firstChild);
+    }
+    answerIndicator();
+  });
+
+
+  /* start */
+  startBtn.addEventListener('click', () => {
+    startPage.classList.add('hide');
+    mainPage.classList.remove('hide');
+    categoryBox.classList.remove('hide');
+
+    dataGet2('https://opentdb.com/api_category.php')
+      .then(data => {
+        allCat = data.trivia_categories.slice(0, 21);
+        console.log(allCat)
+        for (let i = 0; i < allCat.length; i++) {
+          while (categoryCol[i].firstChild) {//почистим категории
+            categoryCol[i].removeChild(categoryCol[i].firstChild);
+          }
+        }
+        createCategories();
+      });
   })
+
+  /* try again */
+  tryBtn.addEventListener('click', () => {
+    resultsBox.classList.add('hide');
+    quizBox.classList.remove('hide');
+    attempt++;
+    clearQuiz();
+  })
+
+
+/* ------------------------Log in & Register------------------- */
+
+const registerBtn = document.querySelector('#register-here');
+const loginForm = document.querySelector('#login');
+const regForm = document.querySelector('#registration');
+
+const regSubmit = document.querySelector('#sub-reg');
+const LogSubmit = document.querySelector('#sub-log');
+
+
+registerBtn.addEventListener('click', () =>{
+  loginForm.classList.add('hide');
+  regForm.classList.remove('hide');
+})
+
+/* registration form */
+const name = document.querySelector('#first_name');
+const email = document.querySelector('#email');
+const password = document.querySelector('#password');
+
+
+const writeAccauntData = () => {
+  localStorage.setItem('Name', name.value);
+  localStorage.setItem('Email', email.value);
+  localStorage.setItem('Password', password.value);
+}
+
+regSubmit.addEventListener('click', ()=> {
+  writeAccauntData();
+})
+
+
+/* LogIn Form */
+
+const nameStorage = localStorage.getItem('Name');
+const passwordStorage = localStorage.getItem('Password');
+
+const loginName = document.querySelector('#username');
+const loginPass = document.querySelector('#password-login');
+
+
+
+
+const checkLogIn = () => {
+  
+  if(nameStorage === loginName.value && passwordStorage === loginPass.value) {
+    console.log('OK!')
+    document.querySelector('#x').click();
+    document.querySelector('#hi-user').classList.remove('hide');
+    document.querySelector('#hi').innerHTML = loginName.value;
+  }else {
+    document.querySelector('.wrong').style.color = 'red';
+    document.querySelector('.wrong').innerHTML = 'Wrong name or password!';
+  }
+}
+
+
+LogSubmit.addEventListener('click', () => {
+  checkLogIn();
+})
+
 
 }

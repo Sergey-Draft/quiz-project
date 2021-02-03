@@ -68,9 +68,12 @@ body {
             border: none;
             border-bottom: solid 5px #4d515a;
             border-radius: 4px;
+            min-width: 280px!important;
+            margin: 10px 20px;
 
 
         }
+
     }
     .btn:focus{
         outline: none !important;
@@ -94,7 +97,8 @@ body {
         background-attachment: fixed;
         background-size: cover;
         background-position: center;
-        height: 100vh;
+        min-height: 100vh;
+        height: 100%;
        }
 
        .main_page .container.main{
@@ -102,12 +106,14 @@ body {
         }
 
        .col{
+        flex-basis: auto;   
         position: relative;
         display: flex;
         flex-direction: column;
         justify-content: center;
         text-align: center;
         align-items: center;
+        cursor: pointer;
 
        }
 
@@ -121,8 +127,15 @@ body {
       }
 
       .category{
+          padding-left: 5px;
+          padding-right: 5px;
+          font-size: 1.5em;
           position: absolute;
           z-index: 2;
+      }
+
+      .img-fluid {
+          opacity: 0.8;
       }
 
       
@@ -280,3 +293,16 @@ body {
 .hide {
     display: none;
 }
+
+
+
+/* Login Form */
+
+#login-form h3{
+    color: #000000!important;
+}
+
+#login-form .form-group {
+    color: #000000!important;
+}
+
