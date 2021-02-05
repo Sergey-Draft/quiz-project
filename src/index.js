@@ -1,7 +1,9 @@
-import _, { includes } from 'lodash';
+import _, { fromPairs, includes } from 'lodash';
 import './style.scss';
-import Icon from './assets/smartkeeda_quiz.jpg'
-import createCategories from './categories'
+import createCategories from './components/categories';
+import { writeAccauntData, checkRegForm } from './forms/registrForm';
+import { checkLogIn, checkFields, userOffOn } from './forms/logInForm';
+import { resultsToStorage, resultsToModal } from './components/results';
 
 const getData = async (url) => {
   const quiz = await fetch(url);
@@ -37,10 +39,10 @@ const tryBtn = document.querySelector('.try-btn');
 const homeBtn = document.querySelector('.home-btn');
 const startBtn = document.querySelector('.btn-start');
 const categoryBox = document.querySelector('.box-category');
-const categoryCol = document.querySelectorAll('.col');
+const showResultBtn = document.querySelector('#last_result');
 
 
-
+quizBox.classList.add('animate__animated', 'animate__backInUp');
 
 
 let questions = [];
@@ -85,6 +87,7 @@ const getNewQuestion = (i) => {
     animation = animation + 0.15;
 
     optionContainer.appendChild(option);
+
     //удалим уже найденный элемент из массива
     answers.splice(rand, 1);
   }
@@ -102,6 +105,7 @@ window.onload = function () {
         optionContainer.removeChild(optionContainer.firstChild);
       }
       getNewQuestion(questionCounter);
+      hardCore();
     }
   });
 
@@ -156,6 +160,7 @@ window.onload = function () {
     quizBox.classList.add('hide');
     resultsBox.classList.remove('hide');
     quizResult();
+    resultsToStorage(); // перезапись объекта в хранилище
   }
   //заполним таблицу с результатами
   const quizResult = () => {
@@ -199,6 +204,7 @@ window.onload = function () {
         questions = data;
         questionCounter = 0;
         getNewQuestion(questionCounter);
+        hardCore();
       });
       quizBox.classList.remove('hide');
       categoryBox.classList.add('hide');
@@ -226,6 +232,9 @@ window.onload = function () {
       indicatorsContainer.removeChild(indicatorsContainer.firstChild);
     }
     answerIndicator();
+    hard = false;
+    document.querySelector('.next-question-btn').classList.remove('hide');
+
   });
 
 
@@ -234,10 +243,18 @@ window.onload = function () {
     startPage.classList.add('hide');
     mainPage.classList.remove('hide');
     categoryBox.classList.remove('hide');
+    console.log(userOffOn);
 
     dataGet2('https://opentdb.com/api_category.php')
       .then(data => {
-        allCat = data.trivia_categories.slice(0, 21);
+        if (userOffOn === undefined) {//незарегистрированному пользователю меньше категорий
+          allCat = data.trivia_categories.slice(0, 6);
+        } else {
+          allCat = data.trivia_categories;
+          hardcoreBtn.classList.remove('hide');
+
+        }
+        console.log(userOffOn)
         console.log(allCat)
         createCategories(allCat);
       });
@@ -252,66 +269,73 @@ window.onload = function () {
   })
 
 
-/* ------------------------Log in & Register------------------- */
-
-const registerBtn = document.querySelector('#register-here');
-const loginForm = document.querySelector('#login');
-const regForm = document.querySelector('#registration');
-
-const regSubmit = document.querySelector('#sub-reg');
-const LogSubmit = document.querySelector('#sub-log');
+  /* show yor last result */
+  showResultBtn.addEventListener('click', () => {
+    resultsToModal();
+  })
 
 
-registerBtn.addEventListener('click', () =>{
-  loginForm.classList.add('hide');
-  regForm.classList.remove('hide');
-})
+  /* ------------------------Log in & Register------------------- */
 
-/* registration form */
-const name = document.querySelector('#first_name');
-const email = document.querySelector('#email');
-const password = document.querySelector('#password');
+  const registerBtn = document.querySelector('#register-here');
+  const loginForm = document.querySelector('#login');
+  const regForm = document.querySelector('#registration');
+  const regSubmit = document.querySelector('#sub-reg');
+  const LogSubmit = document.querySelector('#sub-log');
 
-
-const writeAccauntData = () => {
-  localStorage.setItem('Name', name.value);
-  localStorage.setItem('Email', email.value);
-  localStorage.setItem('Password', password.value);
-}
-
-regSubmit.addEventListener('click', ()=> {
-  writeAccauntData();
-})
+  const loginBtn = document.querySelector('.btn-login');
 
 
-/* LogIn Form */
+  registerBtn.addEventListener('click', () => {
+    loginForm.classList.add('hide');
+    regForm.classList.remove('hide');
+  })
 
-const nameStorage = localStorage.getItem('Name');
-const passwordStorage = localStorage.getItem('Password');
+  regSubmit.addEventListener('click', () => {
+    checkRegForm();
+  })
 
-const loginName = document.querySelector('#username');
-const loginPass = document.querySelector('#password-login');
+  LogSubmit.addEventListener('click', () => {
+    checkFields();
+    checkLogIn();
+  })
+
+  loginBtn.addEventListener('click', () => {
+    regForm.classList.add('hide');
+    loginForm.classList.remove('hide');
+  })
 
 
+  /* таймер для хардкор мода */
 
-
-const checkLogIn = () => {
-  
-  if(nameStorage === loginName.value && passwordStorage === loginPass.value) {
-    console.log('OK!')
-    document.querySelector('#x').click();
-    document.querySelector('#hi-user').classList.remove('hide');
-    document.querySelector('#hi').innerHTML = loginName.value;
-  }else {
-    document.querySelector('.wrong').style.color = 'red';
-    document.querySelector('.wrong').innerHTML = 'Wrong name or password!';
+  let hardcoreBtn = document.querySelector('.btn-harcore');
+  let timer;
+  let hard = false;
+  const hardCore = () => {
+    if (hard) {
+       
+      let x = 10; 
+      countdown();
+      function countdown() {  
+        document.querySelector('.rocket').innerHTML = x;
+        x--; 
+        if (x < 0) {
+          clearTimeout(timer); 
+          document.querySelector('.next').click()
+        }
+        else {
+          timer = setTimeout(countdown, 1000);
+        }
+      }
+    }
   }
-}
 
 
-LogSubmit.addEventListener('click', () => {
-  checkLogIn();
-})
+  hardcoreBtn.addEventListener('click', () => {
+    hard = true;
+    document.querySelector('.next-question-btn').classList.add('hide');
+  })
+
 
 
 }
