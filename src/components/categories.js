@@ -3,9 +3,6 @@ import {userOffOn} from '../forms/logInForm';
 const createCategories = (allCat) => {
     let row = document.querySelector('.categories');
     if (!row) return;
-    while (row.firstChild) {//почистим категории
-      row.removeChild(row.firstChild);
-    }
     for (let i = 0; i < allCat.length; i++) {
       let categoryName = document.createElement('div');
       let categoryImg = document.createElement('img');
