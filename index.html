@@ -18,12 +18,7 @@
   <!-- First page -->
   <nav class="navbar navbar-expand-lg fixed-top ">
 
-    <a class="nav-link dropdown-toggle hide" href="#" id="hi" data-toggle="dropdown" aria-haspopup="true"
-      aria-expanded="false">ss</a>
-    <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-      <a class="dropdown-item" href="#" data-toggle="modal" data-target="#myModal" id="last_result">Show last result</a>
-      <a class="dropdown-item" href="#" onClick="window.location.reload()">Exit</a>
-      <a class="dropdown-item" href="#">Something else here</a>
+    <div id="userInfo">
     </div>
 
 
@@ -55,12 +50,6 @@
           <h4 class="modal-title" id="myModalLabel">You results is here:</h4>
         </div>
         <div class="modal-body-results">
-           tghbdtdg
-           devberswg
-           reger
-
-           regve
-           r
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -70,9 +59,7 @@
   </div>
 
 
-
   <div class="start_page">
-
     <div class="container">
       <div class="description text-center">
         <h2>project Quizz for FUN</h2>
@@ -80,11 +67,8 @@
         <button class="btn btn-primary amber btn-lg btn-start">start quiz!</button>
         <button class="btn btn-primary amber btn-lg btn-login" data-toggle="modal" data-target="#exampleModal"
           type="button">Log in</button>
-
       </div>
     </div>
-    
-
 
     <!-- Modal Reg -->
     <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
@@ -92,99 +76,25 @@
       <div class="modal-dialog" role="document">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLabel">Registration form</h5>
+            <h5 class="modal-title" id="regFormLabel"></h5>
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
               <span aria-hidden="true" id="x">&times;</span>
             </button>
           </div>
           <div class="modal-body">
+            <div id="modal-content">
+              
+            </div>
             <!-- form reg -->
             <div id="registration" class="hide">
-              <div class="row centered-form">
-                <div class="col-12">
-                  <div class="panel panel-default">
-                    <div class="panel-heading">
-                      <h3 class="panel-title">Please register<small>It's free!</small></h3>
-                    </div>
-                    <div class="panel-body">
-                      <form role="form">
-
-
-                        <div class="form-group">
-                          <input type="text" name="first_name" id="first_name" class="form-control input-sm"
-                            placeholder="First Name">
-                        </div>
-
-
-                        <div class="form-group">
-                          <input type="email" name="email" id="email" class="form-control input-sm"
-                            placeholder="Email Address">
-                        </div>
-
-                        <div class="row">
-                          <div class="col-xs-6 col-sm-6 col-md-6">
-                            <div class="form-group">
-                              <input type="password" name="password" id="password" class="form-control input-sm"
-                                placeholder="Password">
-                            </div>
-                          </div>
-                          <div class="col-xs-6 col-sm-6 col-md-6">
-                            <div class="form-group">
-                              <input type="password" name="password_confirmation" id="password_confirmation"
-                                class="form-control input-sm" placeholder="Confirm Password">
-                            </div>
-
-                          </div>
-                        </div>
-                        <div class="wrong_reg"></div>
-                        <input type="button" value="Register" id="sub-reg" class="btn btn-info btn-block">
-
-                      </form>
-                    </div>
-                  </div>
-                </div>
-              </div> <!-- \\form reg -->
             </div>
 
             <!-- form login -->
-            <div id="login">
-
-              <div id="login-row" class="row justify-content-center align-items-center">
-                <div id="login-column" class="col-md-12">
-                  <div id="login-box" class="col-md-12">
-                    <form id="login-form" class="form" action="" method="post">
-                      <h3 class="text-center text-info">Login</h3>
-                      <div class="form-group">
-                        <label for="username" class="text-info"></label><br>
-                        <input type="text" name="username" id="username" class="form-control" placeholder="Username">
-                      </div>
-                      <div class="form-group">
-                        <label for="password-login" class="text-info"></label><br>
-                        <input type="text" name="password-login" id="password-login" class="form-control"
-                          placeholder="Password">
-                        <div class="wrong"></div>
-                      </div>
-                      <div class="form-group">
-                        <label for="remember-me" class="text-info"><span>Remember me</span> <span><input
-                              id="remember-me" name="remember-me" type="checkbox"></span></label><br>
-                        <input type="button" name="submit" class="btn btn-info btn-md" value="LogIn" id="sub-log">
-                      </div>
-                      <div id="register-link" class="text-right">
-                        <a href="#" class="text-info" id="register-here">Register here</a>
-                      </div>
-                    </form>
-                  </div>
-                </div>
-              </div>
-
-            </div>
-
+            <div id="login"></div>
           </div>
         </div>
       </div>
     </div>
-
-
 
   </div>
 
@@ -195,7 +105,7 @@
     <div class="container main">
       <div class="box-category">
         <h2 class="text-center">Select category</h2>
-        <button class="btn btn-primary amber btn-lg btn-harcore hide" >Hardcore Mode</button>
+        <button class="btn btn-primary amber btn-lg btn-harcore hide">Hardcore Mode</button>
         <div class="row align-items-center categories">
         </div>
       </div>

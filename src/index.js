@@ -1,9 +1,11 @@
-import _, { fromPairs, includes } from 'lodash';
 import './style.scss';
 import createCategories from './components/categories';
-import { writeAccauntData, checkRegForm } from './forms/registrForm';
-import { checkLogIn, checkFields, userOffOn } from './forms/logInForm';
+import './forms/registrForm';
+import './forms/logInForm';
+import { showLoginForm } from './forms/forms';
 import { resultsToStorage, resultsToModal } from './components/results';
+import { getUserName, isUserOnline, loadUserInfo } from './forms/userInfo';
+export const sessionId = "quiz-session-unique-id";
 
 const getData = async (url) => {
   const quiz = await fetch(url);
@@ -40,7 +42,7 @@ const homeBtn = document.querySelector('.home-btn');
 const startBtn = document.querySelector('.btn-start');
 const categoryBox = document.querySelector('.box-category');
 const showResultBtn = document.querySelector('#last_result');
-
+const loginBtn = document.querySelector('.btn-login');
 
 quizBox.classList.add('animate__animated', 'animate__backInUp');
 
@@ -96,6 +98,8 @@ const getNewQuestion = (i) => {
 
 window.onload = function () {
 
+  loadUserInfo(sessionId);
+
   next.addEventListener('click', () => {
     questionCounter++;
     if (questionCounter >= questions.results.length) {
@@ -108,7 +112,6 @@ window.onload = function () {
       hardCore();
     }
   });
-
 
   //получим результат выбора ответа и выделим цветом добавив классы
   optionContainer.addEventListener('click', (event) => {
@@ -160,7 +163,7 @@ window.onload = function () {
     quizBox.classList.add('hide');
     resultsBox.classList.remove('hide');
     quizResult();
-    resultsToStorage(); // перезапись объекта в хранилище
+    resultsToStorage(getUserName(sessionId)); // перезапись объекта в хранилище
   }
   //заполним таблицу с результатами
   const quizResult = () => {
@@ -243,18 +246,16 @@ window.onload = function () {
     startPage.classList.add('hide');
     mainPage.classList.remove('hide');
     categoryBox.classList.remove('hide');
-    console.log(userOffOn);
 
     dataGet2('https://opentdb.com/api_category.php')
       .then(data => {
-        if (userOffOn === undefined) {//незарегистрированному пользователю меньше категорий
+        if (!isUserOnline(sessionId)) {//незарегистрированному пользователю меньше категорий
           allCat = data.trivia_categories.slice(0, 6);
         } else {
           allCat = data.trivia_categories;
           hardcoreBtn.classList.remove('hide');
 
         }
-        console.log(userOffOn)
         console.log(allCat)
         createCategories(allCat);
       });
@@ -271,38 +272,7 @@ window.onload = function () {
 
   /* show yor last result */
   showResultBtn.addEventListener('click', () => {
-    resultsToModal();
-  })
-
-
-  /* ------------------------Log in & Register------------------- */
-
-  const registerBtn = document.querySelector('#register-here');
-  const loginForm = document.querySelector('#login');
-  const regForm = document.querySelector('#registration');
-  const regSubmit = document.querySelector('#sub-reg');
-  const LogSubmit = document.querySelector('#sub-log');
-
-  const loginBtn = document.querySelector('.btn-login');
-
-
-  registerBtn.addEventListener('click', () => {
-    loginForm.classList.add('hide');
-    regForm.classList.remove('hide');
-  })
-
-  regSubmit.addEventListener('click', () => {
-    checkRegForm();
-  })
-
-  LogSubmit.addEventListener('click', () => {
-    checkFields();
-    checkLogIn();
-  })
-
-  loginBtn.addEventListener('click', () => {
-    regForm.classList.add('hide');
-    loginForm.classList.remove('hide');
+    resultsToModal(getUserName(sessionId));
   })
 
 
@@ -337,5 +307,8 @@ window.onload = function () {
   })
 
 
+  loginBtn.addEventListener('click', () => {
+    showLoginForm();
+  });
 
 }
