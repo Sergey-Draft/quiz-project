@@ -1,3 +1,4 @@
+/* const homeBtn = document.querySelector('.home-btn'); */
 const template = `
 <a class="nav-link dropdown-toggle " href="#" id="hi" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">User Name</a>
 <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
@@ -47,4 +48,5 @@ document.querySelector('#signOut').addEventListener('click', () => {
     sessionStorage.clear();
     hideUser();
     loginBtn.classList.remove('hide');
+    homeBtn.click();
 });

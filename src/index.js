@@ -222,6 +222,9 @@ homeBtn.addEventListener('click', () => {
   while (indicatorsContainer.firstChild) {//удалим индикаторы
     indicatorsContainer.removeChild(indicatorsContainer.firstChild);
   }
+  while (document.querySelector('.categories').firstChild){
+    document.querySelector('.categories').removeChild(document.querySelector('.categories').firstChild);
+  }
   answerIndicator();
   /* hard = false; */
   document.querySelector('.next-question-btn').classList.remove('hide');
@@ -310,6 +313,9 @@ homeLink.addEventListener('click', () => {
   }
   while (indicatorsContainer.firstChild) {//удалим индикаторы
     indicatorsContainer.removeChild(indicatorsContainer.firstChild);
+  }
+  while (document.querySelector('.categories').firstChild){
+    document.querySelector('.categories').removeChild(document.querySelector('.categories').firstChild);
   }
   answerIndicator();
   hard = false;
