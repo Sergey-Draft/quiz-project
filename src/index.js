@@ -5,27 +5,10 @@ import './forms/logInForm';
 import { showLoginForm } from './forms/forms';
 import { resultsToStorage, resultsToModal } from './components/results';
 import { getUserName, isUserOnline, loadUserInfo } from './forms/userInfo';
+import { getData, getQuestions } from './data/dataService';
 export const sessionId = "quiz-session-unique-id";
 
-const getData = async (url) => {
-  const quiz = await fetch(url);
 
-  //console.log(quiz.json());
-  return await quiz.json();
-
-}
-
-const getQuestions = async (category) => {
-  const data = await getData(`https://opentdb.com/api.php?amount=10&category=${category}&difficulty=medium&type=multiple`);
-  console.log(data);
-  return data;
-}
-
-
-const dataGet2 = async (url) => {
-  let response = await fetch(url);
-  return await response.json();
-}
 
 const startPage = document.querySelector('.start_page');
 const mainPage = document.querySelector('.main_page');
@@ -60,12 +43,6 @@ let attempt = 1;
 var allCat;
 let idCategory;
 
-
-
-
-
-
-
 const getNewQuestion = (i) => {
   //выведем в поле количество вопросов
   currentQuestion = questions.results[i].question;
@@ -92,342 +69,296 @@ const getNewQuestion = (i) => {
     animation = animation + 0.15;
 
     optionContainer.appendChild(option);
-
     //удалим уже найденный элемент из массива
     answers.splice(rand, 1);
   }
 }
 
+loadUserInfo(sessionId);
 
-window.onload = function () {
-
-  loadUserInfo(sessionId);
-
-  next.addEventListener('click', () => {
-    questionCounter++;
-    if (questionCounter >= questions.results.length) {
-      quizEnd();
-    } else {
-      while (optionContainer.firstChild) {//удалим предыдущие контейнеры с вариантами
-        optionContainer.removeChild(optionContainer.firstChild);
-      }
-      getNewQuestion(questionCounter);
-      hardCore();
-    }
-  });
-
-  //получим результат выбора ответа и выделим цветом добавив классы
-  optionContainer.addEventListener('click', (event) => {
-    next.classList.add('lockbtn');
-    let target = event.target;
-    if (target.className !== 'option') return;
-    else {
-      if (correctArr.includes(target.innerText)) {
-        target.classList.add('correct');
-        indicatorValue('correct');
-        correctAnswers++;
-      } else {
-        indicatorValue('incorrect');
-        target.classList.add('incorrect');
-        incorrectAnswers++;
-        const optionLen = optionContainer.children.length;
-        for (let i = 0; i < optionLen; i++) {
-          if (correctArr.includes(optionContainer.children[i].innerHTML)) {
-            optionContainer.children[i].classList.add('correct');
-          }
-        }
-      }
-    }
-    lock();
-    //при выборе откроем следующий вопрос
-
-    setTimeout(() => {
-      next.click();
-      next.classList.remove('lockbtn');
-    }, 1500);
-    clearTimeout(timer)
-  });
-
-
-  // не позволит пользователю выбирать ответы больше одного раза 
-  const lock = () => {
-    const optionLen = optionContainer.children.length;
-    for (let i = 0; i < optionLen; i++) {
-      optionContainer.children[i].classList.add('lock');
-    }
-  };
-
-
-  //индикаторы ответов
-  const answerIndicator = () => {
-    for (let i = 0; i < 10; i++) {
-      let indicator = document.createElement('div');
-      indicatorsContainer.appendChild(indicator);
-    }
-  };
-  //примет значение правильного или неправильного ответа
-  const indicatorValue = (value) => {
-    console.log(value);
-    indicatorsContainer.children[questionCounter].classList.add(value);
-  }
-  answerIndicator();
-
-  const quizEnd = () => {
-    quizBox.classList.add('hide');
-    resultsBox.classList.remove('hide');
-    quizResult();
-    resultsToStorage(getUserName(sessionId)); // перезапись объекта в хранилище
-  }
-
-
-  //заполним таблицу с результатами
-  const quizResult = () => {
-    document.querySelector('.category-name').innerHTML = allCat[idCategory - 9].name;
-    document.querySelector('.total-question').innerHTML = questionCounter;
-    document.querySelector('.total-attempt').innerHTML = attempt;
-    document.querySelector('.total-correct').innerHTML = correctAnswers;
-    document.querySelector('.total-wrong').innerHTML = incorrectAnswers;
-    document.querySelector('.percentage').innerHTML = ((correctAnswers / questionCounter) * 100).toFixed(2) + '%';
-    document.querySelector('.total-score').innerHTML = correctAnswers + '/' + questionCounter;
-    localStorage.setItem('Name', correctAnswers);
-  }
-
-  //очистим все переменные и заново отправим запрос
-  const clearQuiz = () => {
-    correctAnswers = 0;
-    incorrectAnswers = 0;
-    correctArr.length = 0;
-    answers.length = 0;
+next.addEventListener('click', () => {
+  questionCounter++;
+  if (questionCounter >= questions.results.length) {
+    quizEnd();
+  } else {
     while (optionContainer.firstChild) {//удалим предыдущие контейнеры с вариантами
       optionContainer.removeChild(optionContainer.firstChild);
     }
-    while (indicatorsContainer.firstChild) {//удалим индикаторы
-      indicatorsContainer.removeChild(indicatorsContainer.firstChild);
+    getNewQuestion(questionCounter);
+    hardCore();
+  }
+});
+
+//получим результат выбора ответа и выделим цветом добавив классы
+optionContainer.addEventListener('click', (event) => {
+  next.classList.add('lockbtn');
+  let target = event.target;
+  if (target.className !== 'option') return;
+  else {
+    if (correctArr.includes(target.innerText)) {
+      target.classList.add('correct');
+      indicatorValue('correct');
+      correctAnswers++;
+    } else {
+      indicatorValue('incorrect');
+      target.classList.add('incorrect');
+      incorrectAnswers++;
+      const optionLen = optionContainer.children.length;
+      for (let i = 0; i < optionLen; i++) {
+        if (correctArr.includes(optionContainer.children[i].innerHTML)) {
+          optionContainer.children[i].classList.add('correct');
+        }
+      }
     }
+  }
+  lock();
+  //при выборе откроем следующий вопрос
+
+  setTimeout(() => {
+    next.click();
+    next.classList.remove('lockbtn');
+  }, 1000);
+  clearTimeout(timer)
+});
+
+
+// не позволит пользователю выбирать ответы больше одного раза 
+const lock = () => {
+  const optionLen = optionContainer.children.length;
+  for (let i = 0; i < optionLen; i++) {
+    optionContainer.children[i].classList.add('lock');
+  }
+};
+
+
+//индикаторы ответов
+const answerIndicator = () => {
+  for (let i = 0; i < 10; i++) {
+    let indicator = document.createElement('div');
+    indicatorsContainer.appendChild(indicator);
+  }
+};
+//примет значение правильного или неправильного ответа
+const indicatorValue = (value) => {
+  console.log(value);
+  indicatorsContainer.children[questionCounter].classList.add(value);
+}
+answerIndicator();
+
+const quizEnd = () => {
+  quizBox.classList.add('hide');
+  resultsBox.classList.remove('hide');
+  quizResult();
+  resultsToStorage(getUserName(sessionId)); // перезапись объекта в хранилище
+}
+
+//заполним таблицу с результатами
+const quizResult = () => {
+  document.querySelector('.category-name').innerHTML = allCat[idCategory - 9].name;
+  document.querySelector('.total-question').innerHTML = questionCounter;
+  document.querySelector('.total-attempt').innerHTML = attempt;
+  document.querySelector('.total-correct').innerHTML = correctAnswers;
+  document.querySelector('.total-wrong').innerHTML = incorrectAnswers;
+  document.querySelector('.percentage').innerHTML = ((correctAnswers / questionCounter) * 100).toFixed(2) + '%';
+  document.querySelector('.total-score').innerHTML = correctAnswers + '/' + questionCounter;
+  localStorage.setItem('Name', correctAnswers);
+}
+
+//очистим все переменные и заново отправим запрос
+const clearQuiz = () => {
+  correctAnswers = 0;
+  incorrectAnswers = 0;
+  correctArr.length = 0;
+  answers.length = 0;
+  while (optionContainer.firstChild) {//удалим предыдущие контейнеры с вариантами
+    optionContainer.removeChild(optionContainer.firstChild);
+  }
+  while (indicatorsContainer.firstChild) {//удалим индикаторы
+    indicatorsContainer.removeChild(indicatorsContainer.firstChild);
+  }
+  getQuestions(idCategory).then(data => {
+    questions = data;
+    questionCounter = 0;
+    getNewQuestion(questionCounter);
+    answerIndicator();
+  });
+};
+
+
+/* выбираем категорию */
+categoryBox.addEventListener('click', (event) => {
+  if (event.target.className == 'img-fluid' || event.target.className == 'category') {
+    idCategory = event.target.id
+    console.log(idCategory);
     getQuestions(idCategory).then(data => {
       questions = data;
       questionCounter = 0;
       getNewQuestion(questionCounter);
-      answerIndicator();
+      hardCore();
     });
-  };
-
-
-  /* выбираем категорию */
-  categoryBox.addEventListener('click', (event) => {
-    if (event.target.className == 'img-fluid' || event.target.className == 'category') {
-      idCategory = event.target.id
-      console.log(idCategory);
-      getQuestions(idCategory).then(data => {
-        questions = data;
-        questionCounter = 0;
-        getNewQuestion(questionCounter);
-        hardCore();
-      });
-      quizBox.classList.remove('hide');
-      categoryBox.classList.add('hide');
-
-    }
-  })
-
-
-  /* ---------------------------------кнопки---------------------------------- */
-
-  /* home */
-  homeBtn.addEventListener('click', () => {
-    resultsBox.classList.add('hide');
-    mainPage.classList.add('hide');
-    startPage.classList.remove('hide');
-    /* почистим контейнеры и переменные */
-    correctAnswers = 0;
-    incorrectAnswers = 0;
-    correctArr.length = 0;
-    answers.length = 0;
-    while (optionContainer.firstChild) {//удалим предыдущие контейнеры с вариантами
-      optionContainer.removeChild(optionContainer.firstChild);
-    }
-    while (indicatorsContainer.firstChild) {//удалим индикаторы
-      indicatorsContainer.removeChild(indicatorsContainer.firstChild);
-    }
-    answerIndicator();
-    /* hard = false; */
-    document.querySelector('.next-question-btn').classList.remove('hide');
-
-  });
-
-
-  /* start */
-  startBtn.addEventListener('click', () => {
-    startPage.classList.add('hide');
-    mainPage.classList.remove('hide');
-    categoryBox.classList.remove('hide');
-
-    dataGet2('https://opentdb.com/api_category.php')
-      .then(data => {
-        if (!isUserOnline(sessionId)) {//незарегистрированному пользователю меньше категорий
-          allCat = data.trivia_categories.slice(0, 6);
-        } else {
-          allCat = data.trivia_categories;
-          hardcoreBtn.classList.remove('hide');
-          hardcoreOffBtn.classList.remove('hide');
-
-        }
-        console.log(allCat)
-        createCategories(allCat);
-      });
-  })
-
-  /* try again */
-  tryBtn.addEventListener('click', () => {
-    resultsBox.classList.add('hide');
     quizBox.classList.remove('hide');
-    attempt++;
-    clearQuiz();
-    clearTimeout(timer);
-    hardCore();
-  })
+    categoryBox.classList.add('hide');
+
+  }
+})
 
 
-  /* show yor last result */
-  showResultBtn.addEventListener('click', () => {
-    resultsToModal();
-  })
+/* ---------------------------------кнопки---------------------------------- */
+
+/* home */
+homeBtn.addEventListener('click', () => {
+  resultsBox.classList.add('hide');
+  mainPage.classList.add('hide');
+  startPage.classList.remove('hide');
+  /* почистим контейнеры и переменные */
+  correctAnswers = 0;
+  incorrectAnswers = 0;
+  correctArr.length = 0;
+  answers.length = 0;
+  while (optionContainer.firstChild) {//удалим предыдущие контейнеры с вариантами
+    optionContainer.removeChild(optionContainer.firstChild);
+  }
+  while (indicatorsContainer.firstChild) {//удалим индикаторы
+    indicatorsContainer.removeChild(indicatorsContainer.firstChild);
+  }
+  answerIndicator();
+  /* hard = false; */
+  document.querySelector('.next-question-btn').classList.remove('hide');
+
+});
 
 
+/* start */
+startBtn.addEventListener('click', () => {
+  startPage.classList.add('hide');
+  mainPage.classList.remove('hide');
+  categoryBox.classList.remove('hide');
+
+  getData('https://opentdb.com/api_category.php')
+    .then(data => {
+      if (!isUserOnline(sessionId)) {//незарегистрированному пользователю меньше категорий
+        allCat = data.trivia_categories.slice(0, 6);
+      } else {
+        allCat = data.trivia_categories;
+        hardcoreBtn.classList.remove('hide');
+        hardcoreOffBtn.classList.remove('hide');
+
+      }
+      console.log(allCat)
+      createCategories(allCat);
+    });
+})
+
+/* try again */
+tryBtn.addEventListener('click', () => {
+  resultsBox.classList.add('hide');
+  quizBox.classList.remove('hide');
+  attempt++;
+  clearQuiz();
+  clearTimeout(timer);
+  hardCore();
+})
 
 
-  /* ------ close question & choose other category by X & btn 'categories'------ */
-  const closeQuestionCross = document.querySelector('.close-question');
-  closeQuestionCross.addEventListener('click', () => {
-    // почистим контейнеры и переменные
-    correctAnswers = 0;
-    incorrectAnswers = 0;
-    correctArr.length = 0;
-    answers.length = 0;
-    while (optionContainer.firstChild) {//удалим предыдущие контейнеры с вариантами
-      optionContainer.removeChild(optionContainer.firstChild);
-    }
-    while (indicatorsContainer.firstChild) {//удалим индикаторы
-      indicatorsContainer.removeChild(indicatorsContainer.firstChild);
-    }
-    quizBox.classList.add('hide');
-    startBtn.click();
-    answerIndicator();
-    clearTimeout(timer);
-  })
-
-  const closeQuestionBtn = document.querySelector('.cat-btn');
-  closeQuestionBtn.addEventListener('click', () => {
-    resultsBox.classList.add('hide');
-    closeQuestionCross.click();
-  })
-
-  /* ----------------------- Home Link --------------------- */
-
-  const homeLink = document.querySelector('.homeLink');
-  homeLink.addEventListener('click', () => {
-    resultsBox.classList.add('hide');
-    mainPage.classList.add('hide');
-    startPage.classList.remove('hide');
-    quizBox.classList.add('hide');
-    /* почистим контейнеры и переменные */
-    correctAnswers = 0;
-    incorrectAnswers = 0;
-    correctArr.length = 0;
-    answers.length = 0;
-    while (optionContainer.firstChild) {//удалим предыдущие контейнеры с вариантами
-      optionContainer.removeChild(optionContainer.firstChild);
-    }
-    while (indicatorsContainer.firstChild) {//удалим индикаторы
-      indicatorsContainer.removeChild(indicatorsContainer.firstChild);
-    }
-    answerIndicator();
-    hard = false;
-    document.querySelector('.next-question-btn').classList.remove('hide');
-
-  })
+/* show yor last result */
+showResultBtn.addEventListener('click', () => {
+  resultsToModal();
+})
 
 
-  /* ------------------------Log in & Register------------------- */
+/* ------ close question & choose other category by X & btn 'categories'------ */
+const closeQuestionCross = document.querySelector('.close-question');
+closeQuestionCross.addEventListener('click', () => {
+  // почистим контейнеры и переменные
+  correctAnswers = 0;
+  incorrectAnswers = 0;
+  correctArr.length = 0;
+  answers.length = 0;
+  while (optionContainer.firstChild) {//удалим предыдущие контейнеры с вариантами
+    optionContainer.removeChild(optionContainer.firstChild);
+  }
+  while (indicatorsContainer.firstChild) {//удалим индикаторы
+    indicatorsContainer.removeChild(indicatorsContainer.firstChild);
+  }
+  quizBox.classList.add('hide');
+  startBtn.click();
+  answerIndicator();
+  clearTimeout(timer);
+})
 
-  const registerBtn = document.querySelector('#register-here');
-  const loginForm = document.querySelector('#login');
-  const regForm = document.querySelector('#registration');
-  const regSubmit = document.querySelector('#sub-reg');
-  const LogSubmit = document.querySelector('#sub-log');
+const closeQuestionBtn = document.querySelector('.cat-btn');
+closeQuestionBtn.addEventListener('click', () => {
+  resultsBox.classList.add('hide');
+  closeQuestionCross.click();
+})
 
-  const loginBtn = document.querySelector('.btn-login');
+/* ----------------------- Home Link --------------------- */
+const homeLink = document.querySelector('.homeLink');
+homeLink.addEventListener('click', () => {
+  resultsBox.classList.add('hide');
+  mainPage.classList.add('hide');
+  startPage.classList.remove('hide');
+  quizBox.classList.add('hide');
+  /* почистим контейнеры и переменные */
+  correctAnswers = 0;
+  incorrectAnswers = 0;
+  correctArr.length = 0;
+  answers.length = 0;
+  while (optionContainer.firstChild) {//удалим предыдущие контейнеры с вариантами
+    optionContainer.removeChild(optionContainer.firstChild);
+  }
+  while (indicatorsContainer.firstChild) {//удалим индикаторы
+    indicatorsContainer.removeChild(indicatorsContainer.firstChild);
+  }
+  answerIndicator();
+  hard = false;
+  document.querySelector('.next-question-btn').classList.remove('hide');
 
+})
 
-  registerBtn.addEventListener('click', () => {
-    loginForm.classList.add('hide');
-    regForm.classList.remove('hide');
-  })
+/* --------------------------- Hardcore mod ---------------------------------*/
+let timer;
+let hard = false;
 
-  regSubmit.addEventListener('click', () => {
-    checkRegForm();
-  })
+const hardCore = () => {
+  if (hard) {
 
-  LogSubmit.addEventListener('click', () => {
-    checkFields();
-    checkLogIn();
-  })
-
-  loginBtn.addEventListener('click', () => {
-    regForm.classList.add('hide');
-    loginForm.classList.remove('hide');
-    resultsToModal(getUserName(sessionId));
-  })
-
-
-
-  /* --------------------------- Hardcore mod ---------------------------------*/
-
-  let timer;
-  let hard = false;
-
-
-  const hardCore = () => {
-    if (hard) {
-       
-      let x = 10; 
-      countdown();
-      function countdown() {  
-        document.querySelector('.hard_mod').innerHTML = x;
-        x--; 
-        if (x < 0) {
-          clearTimeout(timer); 
-          document.querySelector('.next').click();
-        }
-        else {
-          timer = setTimeout(countdown, 1000);
-        }
+    let x = 10;
+    countdown();
+    function countdown() {
+      document.querySelector('.hard_mod').innerHTML = x;
+      x--;
+      if (x < 0) {
+        clearTimeout(timer);
+        document.querySelector('.next').click();
+      }
+      else {
+        timer = setTimeout(countdown, 1000);
       }
     }
   }
-
-  const hardcoreBtn = document.querySelector('.btn-harcore');
-  const hardcoreOffBtn = document.querySelector('.btn-harcore-off');
-
-  const hardcoreBox = document.querySelector('.timer-box');
-  const hardcoreBoxNext = document.querySelector('.hard_mod');
-
-
-  hardcoreBtn.addEventListener('click', () => {
-    hard = true;
-    hardcoreBox.classList.remove('timerOff');
-    document.querySelector('.next-question-btn').classList.add('hide');
-  })
-
-  hardcoreOffBtn.addEventListener('click', () => {
-    hard = false;
-    clearTimeout(timer);
-    hardcoreBox.classList.add('timerOff');
-    document.querySelector('.next-question-btn').classList.remove('hide');
-  })
-
-  loginBtn.addEventListener('click', () => {
-    showLoginForm();
-  });
-
 }
+
+const hardcoreBtn = document.querySelector('.btn-harcore');
+const hardcoreOffBtn = document.querySelector('.btn-harcore-off');
+
+const hardcoreBox = document.querySelector('.timer-box');
+const hardcoreBoxNext = document.querySelector('.hard_mod');
+
+
+hardcoreBtn.addEventListener('click', () => {
+  hard = true;
+  hardcoreBox.classList.remove('timerOff');
+  document.querySelector('.next-question-btn').classList.add('hide');
+})
+
+hardcoreOffBtn.addEventListener('click', () => {
+  hard = false;
+  clearTimeout(timer);
+  hardcoreBox.classList.add('timerOff');
+  document.querySelector('.next-question-btn').classList.remove('hide');
+})
+
+loginBtn.addEventListener('click', () => {
+  showLoginForm();
+});
