@@ -150,6 +150,7 @@ const quizEnd = () => {
   resultsBox.classList.remove('hide');
   quizResult();
   resultsToStorage(getUserName(sessionId)); // перезапись объекта в хранилище
+  console.log(getUserName(sessionId));
 }
 
 //заполним таблицу с результатами
@@ -262,7 +263,7 @@ tryBtn.addEventListener('click', () => {
 
 /* show yor last result */
 showResultBtn.addEventListener('click', () => {
-  resultsToModal();
+  resultsToModal(getUserName(sessionId));
 })
 
 

@@ -14,6 +14,8 @@ const resultsToStorage = (key) => {
 
 const resultsToModal = (key) => {
     let data = JSON.parse(localStorage.getItem(key));
+    console.log(key)
+    
     let {results:{category, percentage,score}} = data;
     console.log(category)
     
