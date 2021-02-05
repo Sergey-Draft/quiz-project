@@ -37,7 +37,10 @@
         <li class="nav-item dropdown open">
           <a class="nav-link" href="#">About</a>
         </li>
-        <a class="navbar-brand" href="#">IT-Academy logo</a>
+        <li class="nav-item dropdown open">
+          <a class="nav-link homeLink" href="#">Home</a>
+        </li>
+        <!-- <a class="navbar-brand" href="#">IT-Academy logo</a> -->
         <li class="nav-item">
         </li>
       </ul>
@@ -55,12 +58,12 @@
           <h4 class="modal-title" id="myModalLabel">You results is here:</h4>
         </div>
         <div class="modal-body-results">
-           tghbdtdg
-           devberswg
-           reger
+          tghbdtdg
+          devberswg
+          reger
 
-           regve
-           r
+          regve
+          r
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -83,7 +86,7 @@
 
       </div>
     </div>
-    
+
 
 
     <!-- Modal Reg -->
@@ -195,69 +198,77 @@
     <div class="container main">
       <div class="box-category">
         <h2 class="text-center">Select category</h2>
-        <button class="btn btn-primary amber btn-lg btn-harcore hide" >Hardcore Mode</button>
+        <button class="btn btn-primary btn-lg btn-harcore hide">Hardcore Mode ON</button>
+        <button class="btn btn-primary btn-lg btn-harcore-off hide">Hardcore Mode OFF</button>
         <div class="row align-items-center categories">
         </div>
       </div>
+
+      
+      <!-- questions -->
+      <div class="timer-box timerOff">
+        <div class="timer_text">you have a time to make a decision:</div>
+        <div class="hard_mod"></div>
+      </div>
+      
+
+      <div class="quiz-box custom-box hide">
+        <div class="close-question">&nbsp;&nbsp;x</div>
+        <div class="question-number">
+          вопрос 1 из 10
+        </div>
+        <div class="question-text">
+        </div>
+        <div class="option-container">
+        </div>
+        <div class="next-question-btn">
+          <button type="button" class="btn btn-outline-warning next">Next</button>
+        </div>
+        <div class="answers-indicator">
+        </div>
+
+      </div>
+
+      <!-- results -->
+      <div class="result-box custom-box hide">
+        <h1>Your result!</h1>
+        <table>
+          <tr>
+            <td>category</td>
+            <td><span class="category-name"></span></td>
+          </tr>
+          <tr>
+            <td>Total Question</td>
+            <td><span class="total-question"></span></td>
+          </tr>
+          <tr>
+            <td>Attempt</td>
+            <td><span class="total-attempt"></span></td>
+          </tr>
+          <tr>
+            <td>Correct</td>
+            <td><span class="total-correct"></span></td>
+          </tr>
+          <tr>
+            <td>Wrong</td>
+            <td><span class="total-wrong"></span></td>
+          </tr>
+          <tr>
+            <td>Percentage</td>
+            <td><span class="percentage"></span></td>
+          </tr>
+          <tr>
+            <td>Total Score</td>
+            <td><span class="total-score"></span></td>
+          </tr>
+        </table>
+        <button type="button" class="btn btn-outline-warning try-btn">Try Again</button>
+        <button type="button" class="btn btn-outline-warning home-btn">Home</button>
+        <button type="button" class="btn btn-outline-warning cat-btn">Categories</button>
+      </div>
     </div>
 
-
-    <!-- questions -->
-    <div class="quiz-box custom-box hide">
-      <div class="question-number">
-        вопрос 1 из 10
-      </div>
-      <div class="question-text">
-      </div>
-      <div class="option-container">
-      </div>
-      <div class="next-question-btn">
-        <button type="button" class="btn btn-outline-warning next">Next</button>
-      </div>
-      <div class="answers-indicator">
-      </div>
-
-    </div>
-
-    <!-- results -->
-    <div class="result-box custom-box hide">
-      <h1>Your result</h1>
-      <table>
-        <tr>
-          <td>category</td>
-          <td><span class="category-name"></span></td>
-        </tr>
-        <tr>
-          <td>Total Question</td>
-          <td><span class="total-question"></span></td>
-        </tr>
-        <tr>
-          <td>Attempt</td>
-          <td><span class="total-attempt"></span></td>
-        </tr>
-        <tr>
-          <td>Correct</td>
-          <td><span class="total-correct"></span></td>
-        </tr>
-        <tr>
-          <td>Wrong</td>
-          <td><span class="total-wrong"></span></td>
-        </tr>
-        <tr>
-          <td>Percentage</td>
-          <td><span class="percentage"></span></td>
-        </tr>
-        <tr>
-          <td>Total Score</td>
-          <td><span class="total-score"></span></td>
-        </tr>
-      </table>
-      <button type="button" class="btn btn-outline-warning try-btn">Try Again</button>
-      <button type="button" class="btn btn-outline-warning home-btn">Home</button>
-    </div>
-
-    <div class="rocket"></div>
-
+  </div>
 
   </div>
   </div>

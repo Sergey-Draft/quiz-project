@@ -4,6 +4,7 @@ import createCategories from './components/categories';
 import { writeAccauntData, checkRegForm } from './forms/registrForm';
 import { checkLogIn, checkFields, userOffOn } from './forms/logInForm';
 import { resultsToStorage, resultsToModal } from './components/results';
+/* import { hardCore} from './utils/hardcoreMod'; */
 
 const getData = async (url) => {
   const quiz = await fetch(url);
@@ -61,6 +62,9 @@ let idCategory;
 
 
 
+
+
+
 const getNewQuestion = (i) => {
   //выведем в поле количество вопросов
   currentQuestion = questions.results[i].question;
@@ -112,6 +116,7 @@ window.onload = function () {
 
   //получим результат выбора ответа и выделим цветом добавив классы
   optionContainer.addEventListener('click', (event) => {
+    next.classList.add('lockbtn');
     let target = event.target;
     if (target.className !== 'option') return;
     else {
@@ -132,7 +137,15 @@ window.onload = function () {
       }
     }
     lock();
+    //при выборе откроем следующий вопрос
+
+    setTimeout(() => {
+      next.click();
+      next.classList.remove('lockbtn');
+    }, 1500);
+    clearTimeout(timer)
   });
+
 
   // не позволит пользователю выбирать ответы больше одного раза 
   const lock = () => {
@@ -141,6 +154,7 @@ window.onload = function () {
       optionContainer.children[i].classList.add('lock');
     }
   };
+
 
   //индикаторы ответов
   const answerIndicator = () => {
@@ -162,6 +176,8 @@ window.onload = function () {
     quizResult();
     resultsToStorage(); // перезапись объекта в хранилище
   }
+
+
   //заполним таблицу с результатами
   const quizResult = () => {
     document.querySelector('.category-name').innerHTML = allCat[idCategory - 9].name;
@@ -213,7 +229,7 @@ window.onload = function () {
   })
 
 
-  ///////////////////////////////////////////////////кнопки
+  /* ---------------------------------кнопки---------------------------------- */
 
   /* home */
   homeBtn.addEventListener('click', () => {
@@ -232,7 +248,7 @@ window.onload = function () {
       indicatorsContainer.removeChild(indicatorsContainer.firstChild);
     }
     answerIndicator();
-    hard = false;
+    /* hard = false; */
     document.querySelector('.next-question-btn').classList.remove('hide');
 
   });
@@ -252,6 +268,7 @@ window.onload = function () {
         } else {
           allCat = data.trivia_categories;
           hardcoreBtn.classList.remove('hide');
+          hardcoreOffBtn.classList.remove('hide');
 
         }
         console.log(userOffOn)
@@ -266,12 +283,68 @@ window.onload = function () {
     quizBox.classList.remove('hide');
     attempt++;
     clearQuiz();
+    clearTimeout(timer);
+    hardCore();
   })
 
 
   /* show yor last result */
   showResultBtn.addEventListener('click', () => {
     resultsToModal();
+  })
+
+
+
+
+  /* ------ close question & choose other category by X & btn 'categories'------ */
+  const closeQuestionCross = document.querySelector('.close-question');
+  closeQuestionCross.addEventListener('click', () => {
+    // почистим контейнеры и переменные
+    correctAnswers = 0;
+    incorrectAnswers = 0;
+    correctArr.length = 0;
+    answers.length = 0;
+    while (optionContainer.firstChild) {//удалим предыдущие контейнеры с вариантами
+      optionContainer.removeChild(optionContainer.firstChild);
+    }
+    while (indicatorsContainer.firstChild) {//удалим индикаторы
+      indicatorsContainer.removeChild(indicatorsContainer.firstChild);
+    }
+    quizBox.classList.add('hide');
+    startBtn.click();
+    answerIndicator();
+    clearTimeout(timer);
+  })
+
+  const closeQuestionBtn = document.querySelector('.cat-btn');
+  closeQuestionBtn.addEventListener('click', () => {
+    resultsBox.classList.add('hide');
+    closeQuestionCross.click();
+  })
+
+  /* ----------------------- Home Link --------------------- */
+
+  const homeLink = document.querySelector('.homeLink');
+  homeLink.addEventListener('click', () => {
+    resultsBox.classList.add('hide');
+    mainPage.classList.add('hide');
+    startPage.classList.remove('hide');
+    quizBox.classList.add('hide');
+    /* почистим контейнеры и переменные */
+    correctAnswers = 0;
+    incorrectAnswers = 0;
+    correctArr.length = 0;
+    answers.length = 0;
+    while (optionContainer.firstChild) {//удалим предыдущие контейнеры с вариантами
+      optionContainer.removeChild(optionContainer.firstChild);
+    }
+    while (indicatorsContainer.firstChild) {//удалим индикаторы
+      indicatorsContainer.removeChild(indicatorsContainer.firstChild);
+    }
+    answerIndicator();
+    hard = false;
+    document.querySelector('.next-question-btn').classList.remove('hide');
+
   })
 
 
@@ -306,22 +379,24 @@ window.onload = function () {
   })
 
 
-  /* таймер для хардкор мода */
 
-  let hardcoreBtn = document.querySelector('.btn-harcore');
+  /* --------------------------- Hardcore mod ---------------------------------*/
+
   let timer;
   let hard = false;
+
+
   const hardCore = () => {
     if (hard) {
        
       let x = 10; 
       countdown();
       function countdown() {  
-        document.querySelector('.rocket').innerHTML = x;
+        document.querySelector('.hard_mod').innerHTML = x;
         x--; 
         if (x < 0) {
           clearTimeout(timer); 
-          document.querySelector('.next').click()
+          document.querySelector('.next').click();
         }
         else {
           timer = setTimeout(countdown, 1000);
@@ -330,12 +405,24 @@ window.onload = function () {
     }
   }
 
+  const hardcoreBtn = document.querySelector('.btn-harcore');
+  const hardcoreOffBtn = document.querySelector('.btn-harcore-off');
+
+  const hardcoreBox = document.querySelector('.timer-box');
+  const hardcoreBoxNext = document.querySelector('.hard_mod');
+
 
   hardcoreBtn.addEventListener('click', () => {
     hard = true;
+    hardcoreBox.classList.remove('timerOff');
     document.querySelector('.next-question-btn').classList.add('hide');
   })
 
-
+  hardcoreOffBtn.addEventListener('click', () => {
+    hard = false;
+    clearTimeout(timer);
+    hardcoreBox.classList.add('timerOff');
+    document.querySelector('.next-question-btn').classList.remove('hide');
+  })
 
 }

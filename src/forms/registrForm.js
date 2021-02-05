@@ -28,8 +28,6 @@ const writeAccauntData = () => {
         localStorage.setItem(name.value, JSON.stringify(storageData));
         document.querySelector('#x').click();
     }
-
-
 }
 
 export {writeAccauntData, checkRegForm};

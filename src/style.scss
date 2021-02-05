@@ -149,6 +149,17 @@ body {
           border-radius: 10px;
       }
 
+      .quiz-box .close-question{
+          float: right;
+          display: block;
+          width: 40px;
+          height: 30px;
+          border-radius: 50%;
+          border: solid;
+          background-color: #84b643;
+          cursor: pointer;
+      }
+
       .quiz-box .question-number{
           font-size: 18px;
           font-weight: 500;
@@ -206,8 +217,8 @@ body {
         top: 0;
         height: 100%;
         width: 100%;
-        background-color: green;
-        opacity: 0.7;
+        background-color: #84b643;
+        opacity: 1;
         z-index: -1;
       }
 
@@ -230,12 +241,28 @@ body {
       .quiz-box .option-container .lock{
           pointer-events: none;
       }
+
+      .lockbtn{
+        pointer-events: none;
+
+      }
         
 
       .quiz-box .btn{
-          margin: 20px;
+          margin: 20px 20px 20px 0;
           display: inline-block;
+
       }
+
+    .next, .try-btn, .home-btn, .cat-btn, .btn-harcore, .btn-harcore-off{
+        background-color : #84b643!important;
+        color: black;
+        min-width: 150px;
+    }
+
+    .btn-harcore, .btn-harcore-off{
+        border: none!important;
+    }
 
       .quiz-box .answers-indicator{
           border-top: 1px solid #cccccc;
@@ -270,7 +297,7 @@ body {
 .result-box h1{
     font-size: 36px;
     line-height: 42px;
-    color: #009688;
+    color: #ffffff;
 }
 
 .result-box table{
@@ -284,6 +311,7 @@ body {
     width: 50%;
     text-align: left;
     font-size: 24px;
+    color: #2e1c04;
 }
 .result-box .btn{
     margin-right: 30px;
@@ -309,4 +337,37 @@ body {
 
 .red {
     background-color: red;
+}
+
+
+
+/* timer */
+
+.timer-box {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+}
+
+.timer-box .hard_mod {
+    font-size: 2em;
+    width: 70px;
+    height: 60px;
+    border-radius: 50%;
+    border: solid;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: 50px;
+    background-color: #84b643;
+}
+
+.timerOn {
+    opacity: 1;
+}
+
+.timerOff {
+    opacity: 0;
 }
