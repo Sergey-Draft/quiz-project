@@ -48,5 +48,5 @@ document.querySelector('#signOut').addEventListener('click', () => {
     sessionStorage.clear();
     hideUser();
     loginBtn.classList.remove('hide');
-    homeBtn.click();
+   /*  homeBtn.click(); */
 });

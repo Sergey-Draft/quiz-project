@@ -13,7 +13,7 @@ const createCategories = (allCat) => {
       categoryImg.classList.add('img-fluid');
       categoryImg.src = './assets/pusto4.png';
       let col = document.createElement('div');
-      col.classList.add('col-lg-4', 'col-md-4', 'col-sm-12', 'col', 'animate__animated', 'animate__backInUp');
+      col.classList.add('col-lg-4', 'col-md-4', 'col-sm-12', 'col', 'animate__animated', 'animate__backInDown');
       col.appendChild(categoryImg);
       col.appendChild(categoryName);
       row.appendChild(col);

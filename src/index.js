@@ -27,7 +27,7 @@ const categoryBox = document.querySelector('.box-category');
 const showResultBtn = document.querySelector('#last_result');
 const loginBtn = document.querySelector('.btn-login');
 
-quizBox.classList.add('animate__animated', 'animate__backInUp');
+quizBox.classList.add('animate__animated', 'animate__backInDown');
 
 
 let questions = [];
@@ -284,6 +284,9 @@ closeQuestionCross.addEventListener('click', () => {
   while (indicatorsContainer.firstChild) {//удалим индикаторы
     indicatorsContainer.removeChild(indicatorsContainer.firstChild);
   }
+  while (document.querySelector('.categories').firstChild){
+    document.querySelector('.categories').removeChild(document.querySelector('.categories').firstChild);
+  }
   quizBox.classList.add('hide');
   startBtn.click();
   answerIndicator();
@@ -296,32 +299,7 @@ closeQuestionBtn.addEventListener('click', () => {
   closeQuestionCross.click();
 })
 
-/* ----------------------- Home Link --------------------- */
-const homeLink = document.querySelector('.homeLink');
-homeLink.addEventListener('click', () => {
-  resultsBox.classList.add('hide');
-  mainPage.classList.add('hide');
-  startPage.classList.remove('hide');
-  quizBox.classList.add('hide');
-  /* почистим контейнеры и переменные */
-  correctAnswers = 0;
-  incorrectAnswers = 0;
-  correctArr.length = 0;
-  answers.length = 0;
-  while (optionContainer.firstChild) {//удалим предыдущие контейнеры с вариантами
-    optionContainer.removeChild(optionContainer.firstChild);
-  }
-  while (indicatorsContainer.firstChild) {//удалим индикаторы
-    indicatorsContainer.removeChild(indicatorsContainer.firstChild);
-  }
-  while (document.querySelector('.categories').firstChild){
-    document.querySelector('.categories').removeChild(document.querySelector('.categories').firstChild);
-  }
-  answerIndicator();
-  hard = false;
-  document.querySelector('.next-question-btn').classList.remove('hide');
 
-})
 
 /* --------------------------- Hardcore mod ---------------------------------*/
 let timer;
@@ -369,3 +347,13 @@ hardcoreOffBtn.addEventListener('click', () => {
 loginBtn.addEventListener('click', () => {
   showLoginForm();
 });
+
+/* ----------------------- Home Link --------------------- */
+const homeLink = document.querySelector('.homeLink');
+homeLink.addEventListener('click', () => {
+  document.querySelector('.next-question-btn').classList.remove('hide');
+  hardcoreOffBtn.click();
+  homeBtn.click();
+
+})
+
