@@ -4,7 +4,7 @@ import './forms/registrForm';
 import './forms/logInForm';
 import { showLoginForm } from './forms/forms';
 import { resultsToStorage, resultsToModal } from './components/results';
-import { getUserName, isUserOnline, loadUserInfo } from './forms/userInfo';
+import { getUserName, isUserOnline, loadUserInfo, hideUser } from './forms/userInfo';
 import { getData, getQuestions } from './data/dataService';
 export const sessionId = "quiz-session-unique-id";
 
@@ -54,7 +54,6 @@ const getNewQuestion = (i) => {
   answers.push(questions.results[i].correct_answer);
   let answLength = answers.length;
   correctArr.push(questions.results[i].correct_answer);
-  console.log('правильные ответы:' + ' = ' + correctArr);
 
   //вставим в документ
   let animation = 0.15;
@@ -140,7 +139,6 @@ const answerIndicator = () => {
 };
 //примет значение правильного или неправильного ответа
 const indicatorValue = (value) => {
-  console.log(value);
   indicatorsContainer.children[questionCounter].classList.add(value);
 }
 answerIndicator();
@@ -149,7 +147,13 @@ const quizEnd = () => {
   quizBox.classList.add('hide');
   resultsBox.classList.remove('hide');
   quizResult();
-  resultsToStorage(getUserName(sessionId)); // перезапись объекта в хранилище
+  
+  
+  
+  
+  if(isUserOnline) {
+    resultsToStorage(getUserName(sessionId)); // перезапись объекта в хранилище
+  }
   console.log(getUserName(sessionId));
 }
 
@@ -190,7 +194,6 @@ const clearQuiz = () => {
 categoryBox.addEventListener('click', (event) => {
   if (event.target.className == 'img-fluid' || event.target.className == 'category') {
     idCategory = event.target.id
-    console.log(idCategory);
     getQuestions(idCategory).then(data => {
       questions = data;
       questionCounter = 0;
@@ -246,9 +249,9 @@ startBtn.addEventListener('click', () => {
         allCat = data.trivia_categories;
         hardcoreBtn.classList.remove('hide');
         hardcoreOffBtn.classList.remove('hide');
+        hardcoreBtns.classList.remove('hide');
 
       }
-      console.log(allCat)
       createCategories(allCat);
     });
 })
@@ -328,13 +331,18 @@ const hardcoreBtn = document.querySelector('.btn-harcore');
 const hardcoreOffBtn = document.querySelector('.btn-harcore-off');
 
 const hardcoreBox = document.querySelector('.timer-box');
-const hardcoreBoxNext = document.querySelector('.hard_mod');
+const hardcoreBtns = document.querySelector('.hardcore_btns');
 
 
 hardcoreBtn.addEventListener('click', () => {
   hard = true;
   hardcoreBox.classList.remove('timerOff');
   document.querySelector('.next-question-btn').classList.add('hide');
+  if(hardcoreOffBtn.className !='hard'){
+    hardcoreBtn.classList.add('hard')
+    hardcoreOffBtn.classList.remove('hard')
+  }
+  
 })
 
 hardcoreOffBtn.addEventListener('click', () => {
@@ -342,6 +350,11 @@ hardcoreOffBtn.addEventListener('click', () => {
   clearTimeout(timer);
   hardcoreBox.classList.add('timerOff');
   document.querySelector('.next-question-btn').classList.remove('hide');
+  if(hardcoreBtn.className !='hard'){
+    hardcoreOffBtn.classList.add('hard')
+    hardcoreBtn.classList.remove('hard')
+  }
+  
 })
 
 loginBtn.addEventListener('click', () => {
@@ -351,9 +364,21 @@ loginBtn.addEventListener('click', () => {
 /* ----------------------- Home Link --------------------- */
 const homeLink = document.querySelector('.homeLink');
 homeLink.addEventListener('click', () => {
-  document.querySelector('.next-question-btn').classList.remove('hide');
   hardcoreOffBtn.click();
   homeBtn.click();
+  quizBox.classList.add('hide');
+  if(!isUserOnline) {
+    hardcoreBtns.classList.add('hide');
+  }
+
 
 })
 
+document.querySelector('#signOut').addEventListener('click', () => {
+  sessionStorage.clear();
+  hideUser();
+  loginBtn.classList.remove('hide');
+  homeLink.click();
+  hardcoreOffBtn.click();
+  hardcoreBtns.classList.add('hide');
+});

@@ -14,7 +14,7 @@ const showLoggedUser = (userName) => {
     document.querySelector('#hi').innerHTML = userName;
 };
 
-const hideUser = () => {
+export const hideUser = () => {
     document.querySelector('#hi').classList.add('hide');
     document.querySelector('#hi').innerHTML = '';
 };
@@ -44,9 +44,3 @@ export const getUserName = (sessionId) => {
     return session;
 }
 
-document.querySelector('#signOut').addEventListener('click', () => {
-    sessionStorage.clear();
-    hideUser();
-    loginBtn.classList.remove('hide');
-   /*  homeBtn.click(); */
-});

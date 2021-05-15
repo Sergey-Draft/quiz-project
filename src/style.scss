@@ -337,7 +337,7 @@ body {
 }
 
 .red {
-    background-color: red;
+    background-color: red!important;
 }
 
 
@@ -371,4 +371,12 @@ body {
 
 .timerOff {
     opacity: 0;
+}
+
+.hard {
+    background-color: #e08114!important;
+}
+
+.navbar {
+    justify-content: space-between!important;
 }
