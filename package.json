@@ -7,7 +7,9 @@
     "watch": "webpack --watch",
     "build": "webpack",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "webpack serve --open"
+    "start": "webpack serve --open",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d dist"
   },
   "repository": {
     "type": "git",
@@ -18,11 +20,12 @@
   "bugs": {
     "url": "https://github.com/Sergey-Draft/quiz-project/issues"
   },
-  "homepage": "https://github.com/Sergey-Draft/quiz-project#readme",
+  "homepage": "https://sergey-draft.github.io/quiz-project/",
   "devDependencies": {
     "clean-webpack-plugin": "^3.0.0",
     "copy-webpack-plugin": "^7.0.0",
     "css-loader": "^5.0.1",
+    "gh-pages": "^3.2.3",
     "html-webpack-plugin": "^4.5.1",
     "postcss-loader": "^4.1.0",
     "sass": "^1.32.4",
@@ -34,6 +37,6 @@
   },
   "dependencies": {
     "bootstrap": "^4.5.3",
-    "lodash": "^4.17.20"
+    "lodash": "^4.17.21"
   }
 }

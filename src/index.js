@@ -6,6 +6,7 @@ import { showLoginForm } from './forms/forms';
 import { resultsToStorage, resultsToModal } from './components/results';
 import { getUserName, isUserOnline, loadUserInfo, hideUser } from './forms/userInfo';
 import { getData, getQuestions } from './data/dataService';
+import preloader from './components/preloader';
 export const sessionId = "quiz-session-unique-id";
 
 
@@ -42,6 +43,8 @@ let attempt = 1;
 
 var allCat;
 let idCategory;
+
+window.onload = preloader;
 
 const getNewQuestion = (i) => {
   //выведем в поле количество вопросов
@@ -237,14 +240,16 @@ homeBtn.addEventListener('click', () => {
 
 /* start */
 startBtn.addEventListener('click', () => {
+  document.querySelector('.preloader').classList.remove('loaded')
   startPage.classList.add('hide');
   mainPage.classList.remove('hide');
   categoryBox.classList.remove('hide');
 
   getData('https://opentdb.com/api_category.php')
     .then(data => {
+      document.querySelector('.preloader').classList.add('loaded')
       if (!isUserOnline(sessionId)) {//незарегистрированному пользователю меньше категорий
-        allCat = data.trivia_categories.slice(0, 6);
+        allCat = data.trivia_categories.slice(0, 9);
       } else {
         allCat = data.trivia_categories;
         hardcoreBtn.classList.remove('hide');

@@ -1,7 +1,8 @@
 
 const getData = async (url) => {
     let response = await fetch(url);
-    return await response.json();
+    return await 
+    response.json();
   }
   
   const getQuestions = async (category) => {

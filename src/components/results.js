@@ -1,7 +1,6 @@
 /* User results set */
 
 const resultsToStorage = (key) => {
-    if(!sessionStorage.key(0)) {
     let resultsNew = {
         category: document.querySelector('.category-name').innerHTML,
         percentage: document.querySelector('.percentage').innerHTML,
@@ -10,7 +9,6 @@ const resultsToStorage = (key) => {
     let oldUserData = JSON.parse(localStorage.getItem(key));
     oldUserData.results = resultsNew;
     localStorage.setItem(key, JSON.stringify(oldUserData));// перезапишем в localStorage взяв старый ключ и перезаписав его с новыми результатами
-}
 }
 
 
